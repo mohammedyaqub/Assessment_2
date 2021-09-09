@@ -1,0 +1,152 @@
+1)  
+
+ Concurrency :-
+              It is the composition of independently executing process.
+(process in the general sense, not linux processes. Famously hard to define.)
+ Parallelism:-  
+             Programming as the simultaneous execution of (possibly related) computatons.
+concurrency VS Parallelism:-
+*Concurrency is dealing with lots of things at once.
+*Parallelism is about doing lots of things at once.
+Not the same , but related.
+*Concurrency is about structure, Parallelism is about execution.
+*Concurrency provides a way to structure a solution to solve a problem that may(but not necessarly) be parallelizable.
+*It doesn't necessarily mean they'll ever both be running at the same instant.
+   For example, multitasking on a single-core machine.
+*Parallelism is when tasks literally run at the same time.
+   For Example :- on a multicore processor.
+
+2)
+
+*Go provides a mechanism called a channel. Go channel  is used to share data between goroutines.
+*channel work with two principal operations one is sending and another one is receiving.
+*If both the operations collectively known as communication. 
+*And the direction of <- operator indicates whether the data is received or send. 
+*In the channel, the send and receive operation block until another side is not ready by default.
+send operation:- Mychannel <- element
+Receive operation:- element := <-Mychannel
+
+
+3)
+package main
+
+import “fmt”
+
+func myhello(ch chan bool) {
+        fmt.Println(“My Hello world goroutine”)
+        ch <- true 
+}
+func main() {
+        ch1 := make(chan bool)
+        go myhello(ch1)
+        val := <-ch1
+        fmt.Println(“in main function, Returned value is “, val)
+
+}
+
+4)
+*The direction of <- channel  operator indicates whether the data is received values or send values . 
+send operation:- Mychannel <- element
+Receive operation:- element := <-Mychannel
+Example:-
+ch <- v    // Send v to channel ch.
+v := <-ch  // Receive from ch, and
+           // assign value to v.
+(The data flows in the direction of the arrow.)
+
+
+5)
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+
+    A1 := make(chan string, 1)
+    go func() {
+        time.Sleep(2 * time.Second)
+        A1 <- "result 1"
+    }()
+
+    select {
+    case res := <-A1:
+        fmt.Println(res)
+    case <-time.After(1 * time.Second):
+        fmt.Println("timeout 1")
+    }
+}
+
+6)
+
+*Channels is used to shared the data between goroutines.
+*Two types of channels:-
+                        Buffered channel and
+                        UnBuffered channel
+*A buffered channel is used for perform asynchronous communication.
+*In buffered channel there is a capacity to hold one or more values before they're received.
+buffered := make(chan int, 22)	// Buffered channel of integer type.
+
+       channel name:=make(chan type,20)
+
+8)
+ package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func Min(x, y int) {
+	if x < y {
+		fmt.Println(x, "is lesser value")
+	} else {
+		fmt.Println(y, "is lesser value")
+	}
+}
+
+func Max(x, y int) {
+	if x < y {
+		fmt.Println(y, "is greater value")
+	} else {
+		fmt.Println(x, "is greater value")
+	}
+}
+
+func main() {
+	var num1, num2 int
+	fmt.Println("Enter two numbers")
+	fmt.Scanln(&num1)
+	fmt.Scanln(&num2)
+	go Min(num1, num2)
+	go Max(num1, num2)
+	time.Sleep(1* time.Second)
+	fmt.Println("Main routine ended")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     
+
+
+
+
+
+
+
+
+
+
+
