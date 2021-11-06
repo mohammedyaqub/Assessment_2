@@ -79,6 +79,17 @@ func main() {
     }
 }
 
+//another way of doing
+func mysleep(x int) {
+    //here x is int need to be type to pass after fun 
+    // time.After return a channel will block untill the given time 
+    <-time.After(time.Second * time.Duration(x))//blocks untill its received 
+}
+
+func main(){
+    mysleep(5)//sleeping for the 5 seconds
+}
+
 6)
 
 *Channels is used to shared the data between goroutines.
