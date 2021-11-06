@@ -79,6 +79,24 @@ func main() {
     }
 }
 
+package main
+
+import (
+//	"fmt"
+	"time"
+)
+
+//another way of doing
+func mysleep(x int) {
+    //here x is int need to be type to pass after fun 
+    // time.After return a channel will block untill the given time 
+    <-time.After(time.Second * time.Duration(x))//blocks untill its received 
+}
+
+func main(){
+    mysleep(5)//sleeping for the 5 seconds
+}
+
 6)
 
 *Channels is used to shared the data between goroutines.
@@ -87,6 +105,7 @@ func main() {
                         UnBuffered channel
 *A buffered channel is used for perform asynchronous communication.
 *In buffered channel there is a capacity to hold one or more values before they're received.
+*buffered channel also removes the synchronization
 buffered := make(chan int, 22)	// Buffered channel of integer type.
 
        channel name:=make(chan type,20)
@@ -125,8 +144,56 @@ func main() {
 	time.Sleep(1* time.Second)
 	fmt.Println("Main routine ended")
 }
+*another way doing with wait group we are waiting in main for a go routines to finished their tasks
 
+package main
 
+import (
+	"fmt"
+	"sync"
+)
+
+func Min(x, y int, wg *sync.WaitGroup)int {
+	defer wg.Done()
+	if x < y {
+		//fmt.Println("min is ", x)
+		return x
+	} else {
+		//fmt.Println("min is ", y)
+		return y
+	}
+}
+func Max(x, y int, wg *sync.WaitGroup)int {
+	defer wg.Done()
+	if x > y {
+		//fmt.Println("max is ", x)
+		return x
+	} else {
+		//fmt.Println("max is ", y)
+		return y
+	}
+}
+// func Common(c chan int )<-chan int {
+
+// }
+
+ 
+//  func main(){
+
+// }
+
+func main() {
+	a, b := 2, 4
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	go func() {
+		mi :=  Min(a, b, &wg)
+		fmt.Println("min is",mi)
+		ma :=  Max(a, b, &wg)
+		fmt.Println("max is",ma)
+	}()
+	wg.Wait()//wait untill go routines finished 
+} 
 
 
 
